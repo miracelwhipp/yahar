@@ -80,11 +80,9 @@ action:
             data:
               brightness_step_pct: -20
               transition: "{{ (var_speed / 1000)|float }}"
-      - conditions: # press right arrow button
+      - conditions: # press right or left arrow button
           - condition: template
             value_template: '{{ trigger.event.data.command == "press" }}'
-          - condition: template
-            value_template: "{{ trigger.event.data.args == [256,13,0] }}"
         sequence:
           - service: light.turn_on
             target:
@@ -92,40 +90,16 @@ action:
             data:
               rgb_color:
                 - >
-                  ((((state_attr(var_light, \"rgb_color\")[0] // 255) * 4 +
-                  (state_attr(var_light, \"rgb_color\")[1] // 255) * 2 +
-                  (state_attr(var_light, \"rgb_color\")[2] // 255)) + 1) // 2 % 2) * 255
+                  ((((state_attr(var_light, "rgb_color")[0] // 255) * 4 +
+                  (state_attr(var_light, "rgb_color")[1] // 255) * 2 +
+                  (state_attr(var_light, "rgb_color")[2] // 255)) + (1 - (2 * (257 - trigger.event.params.param1)))) // 2 % 2) * 255
                 - >
-                  ((((state_attr(var_light, \"rgb_color\")[0] // 255) * 4 +
-                  (state_attr(var_light, \"rgb_color\")[1] // 255) * 2 +
-                  (state_attr(var_light, \"rgb_color\")[2] // 255)) + 1) // 2 % 2) * 255
+                  ((((state_attr(var_light, "rgb_color")[0] // 255) * 4 +
+                  (state_attr(var_light, "rgb_color")[1] // 255) * 2 +
+                  (state_attr(var_light, "rgb_color")[2] // 255)) + (1 - (2 * (257 - trigger.event.params.param1)))) // 2 % 2) * 255
                 - >
-                  ((((state_attr(var_light, \"rgb_color\")[0] // 255) * 4 +
-                  (state_attr(var_light, \"rgb_color\")[1] // 255) * 2 +
-                  (state_attr(var_light, \"rgb_color\")[2] // 255)) + 1) % 2) * 255
-              transition: "{{ (var_speed / 1000)|float }}"
-      - conditions: # press left arrow button
-          - condition: template
-            value_template: '{{ trigger.event.data.command == "press" }}'
-          - condition: template
-            value_template: "{{ trigger.event.data.args == [257,13,0] }}"
-        sequence:
-          - service: light.turn_on
-            target:
-              entity_id: !input "light"
-            data:
-              rgb_color:
-                - >
-                  ((((state_attr(var_light, \"rgb_color\")[0] // 255) * 4 +
-                  (state_attr(var_light, \"rgb_color\")[1] // 255) * 2 +
-                  (state_attr(var_light, \"rgb_color\")[2] // 255)) - 1) // 2 % 2) * 255
-                - >
-                  ((((state_attr(var_light, \"rgb_color\")[0] // 255) * 4 +
-                  (state_attr(var_light, \"rgb_color\")[1] // 255) * 2 +
-                  (state_attr(var_light, \"rgb_color\")[2] // 255)) - 1) // 2 % 2) * 255
-                - >
-                  ((((state_attr(var_light, \"rgb_color\")[0] // 255) * 4 +
-                  (state_attr(var_light, \"rgb_color\")[1] // 255) * 2 +
-                  (state_attr(var_light, \"rgb_color\")[2] // 255)) - 1) % 2) * 255
+                  ((((state_attr(var_light, "rgb_color")[0] // 255) * 4 +
+                  (state_attr(var_light, "rgb_color")[1] // 255) * 2 +
+                  (state_attr(var_light, "rgb_color")[2] // 255)) + (1 - (2 * (257 - trigger.event.params.param1)))) % 2) * 255
               transition: "{{ (var_speed / 1000)|float }}"
     default: []
