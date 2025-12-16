@@ -138,7 +138,7 @@ action:
                 {% else %}
                   {% set nextValue = next + min %}
                 {% endif %}
-                {{ next }}
+                {{next + min}}
               transition: "{{ (var_speed / 1000)|float }}"
 #      - conditions: # press right or left arrow button
 #          - condition: template
