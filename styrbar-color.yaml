@@ -90,7 +90,7 @@ action:
             data:
               rgb_color:
                 - >
-                  {% if state_attr(var_light, "rgb_color")[0] == 255 and state_attr(var_light, "rgb_color")[1] == 170 and state_attr(var_light, "rgb_color")[2] == 96 %}
+                  {% if state_attr(var_light, "rgb_color")[0] == 255 and state_attr(var_light, "rgb_color")[1] == 170 and state_attr(var_light, "rgb_color")[2] // 5 == 19 %}
                     {% set high = 0 %}
                     {% set middle = 0 %}
                     {% set low = 0 %}
@@ -107,7 +107,7 @@ action:
                     {{((next // 4) % 2) * 255}}
                   {% endif %}
                 - >
-                  {% if state_attr(var_light, "rgb_color")[0] == 255 and state_attr(var_light, "rgb_color")[1] == 170 and state_attr(var_light, "rgb_color")[2] == 96 %}
+                  {% if state_attr(var_light, "rgb_color")[0] == 255 and state_attr(var_light, "rgb_color")[1] == 170 and state_attr(var_light, "rgb_color")[2] // 5 == 19 %}
                     {% set high = 0 %}
                     {% set middle = 0 %}
                     {% set low = 0 %}
@@ -124,7 +124,7 @@ action:
                     {{((next // 2) % 2) * 255}}
                   {% endif %}
                 - >
-                  {% if state_attr(var_light, "rgb_color")[0] == 255 and state_attr(var_light, "rgb_color")[1] == 170 and state_attr(var_light, "rgb_color")[2] == 96 %}
+                  {% if state_attr(var_light, "rgb_color")[0] == 255 and state_attr(var_light, "rgb_color")[1] == 170 and state_attr(var_light, "rgb_color")[2] // 5 == 19 %}
                     {% set high = 0 %}
                     {% set middle = 0 %}
                     {% set low = 0 %}
