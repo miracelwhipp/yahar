@@ -85,8 +85,8 @@ action:
             target:
               entity_id: !input "light"
             data:
-              brightness: {{ var_default_brightness }}
-              color_temp: {{ var_default_color }}
+              brightness: "{{ var_default_brightness }}"
+              color_temp: "{{ var_default_color }}"
       - conditions:
           - condition: template
             value_template: '{{ trigger.event.data.command == "off" }}'
