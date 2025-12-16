@@ -33,11 +33,22 @@ blueprint:
           unit_of_measurement: milliseconds
           mode: slider
       default: 500
+    default_color:
+      name: Default Color
+      description: The color of the light when turned on
+      selector:
+        color_temp:
+          unit: mired
+          min: 250
+          max: 454
 mode: restart
 max_exceeded: silent
 variables:
   var_light: !input "light"
   var_speed: !input "speed"
+  var_default_color: !input "default_color"
+  var_default_brightness: 255
+  var_steps: 20
 trigger:
   - platform: event
     event_type: zha_event
@@ -53,8 +64,8 @@ action:
             target:
               entity_id: !input "light"
             data:
-              brightness: 255
-#              rgb_color: [255, 170, 90]
+              brightness: {{ var_default_brightness }}
+              color_temp: {{ var_default_color }}
       - conditions:
           - condition: template
             value_template: '{{ trigger.event.data.command == "off" }}'
@@ -90,57 +101,16 @@ action:
             target:
               entity_id: !input "light"
             data:
-              rgb_color:
-                - >
-                  {% if state_attr(var_light, "rgb_color")[0] == 255 and state_attr(var_light, "rgb_color")[1] // 10 == 17 and state_attr(var_light, "rgb_color")[2] // 10 == 9 %}
-                    {% set high = 0 %}
-                    {% set middle = 0 %}
-                    {% set low = 0 %}
-                  {% else %}
-                    {% set high = (state_attr(var_light, "rgb_color")[0] // 250) %}
-                    {% set middle = (state_attr(var_light, "rgb_color")[1] // 250) %}
-                    {% set low = (state_attr(var_light, "rgb_color")[2] // 250) %}
-                  {% endif %}
-                  {% set current = high * 4 + middle * 2 + low %}
-                  {% set next = (current + (1 - (2 * (257 - trigger.event.data.params.param1)))) % 8 %}
-                  {% if next == 0 %}
-                    255
-                  {% else %}
-                    {{((next // 4) % 2) * 255}}
-                  {% endif %}
-                - >
-                  {% if state_attr(var_light, "rgb_color")[0] == 255 and state_attr(var_light, "rgb_color")[1] // 10 == 17 and state_attr(var_light, "rgb_color")[2] // 10 == 9 %}
-                    {% set high = 0 %}
-                    {% set middle = 0 %}
-                    {% set low = 0 %}
-                  {% else %}
-                    {% set high = (state_attr(var_light, "rgb_color")[0] // 250) %}
-                    {% set middle = (state_attr(var_light, "rgb_color")[1] // 250) %}
-                    {% set low = (state_attr(var_light, "rgb_color")[2] // 250) %}
-                  {% endif %}
-                  {% set current = high * 4 + middle * 2 + low %}
-                  {% set next = (current + (1 - (2 * (257 - trigger.event.data.params.param1)))) % 8 %}
-                  {% if next == 0 %}
-                    170
-                  {% else %}
-                    {{((next // 2) % 2) * 255}}
-                  {% endif %}
-                - >
-                  {% if state_attr(var_light, "rgb_color")[0] == 255 and state_attr(var_light, "rgb_color")[1] // 10 == 17 and state_attr(var_light, "rgb_color")[2] // 10 == 9 %}
-                    {% set high = 0 %}
-                    {% set middle = 0 %}
-                    {% set low = 0 %}
-                  {% else %}
-                    {% set high = (state_attr(var_light, "rgb_color")[0] // 250) %}
-                    {% set middle = (state_attr(var_light, "rgb_color")[1] // 250) %}
-                    {% set low = (state_attr(var_light, "rgb_color")[2] // 250) %}
-                  {% endif %}
-                  {% set current = high * 4 + middle * 2 + low %}
-                  {% set next = (current + (1 - (2 * (257 - trigger.event.data.params.param1)))) % 8 %}
-                  {% if next == 0 %}
-                    90
-                  {% else %}
-                    {{((next // 1) % 2) * 255}}
-                  {% endif %}
+              color_temp: >
+                {% set min = state_attr(var_light, "min_mireds") %}
+                {% set max_range = state_attr(var_light, "max_mireds") - min %}
+                {% set current = state_attr(var_light, "color_temp") - min %}
+                {% set next = ((((current + var_step) // var_step) * var_step) % max_range) %}
+                {% if (next - (var_default_color - min))|abs() < var_step %}
+                  {% set nextValue = var_default_color %}
+                {% else %}
+                  {% set nextValue = next + min %}
+                {% endif %}
+                {{ nextValue }}
               transition: "{{ (var_speed / 1000)|float }}"
     default: []
