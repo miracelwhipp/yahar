@@ -123,7 +123,7 @@ action:
             target:
               entity_id: !input "light"
             data:
-              color_temp: >
+              color_temp: >-
                 {% set min = state_attr(var_light, "min_mireds") %}
                 {% set max_range = state_attr(var_light, "max_mireds") - min %}
                 {% set current = state_attr(var_light, "color_temp") - min %}
