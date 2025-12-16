@@ -52,7 +52,7 @@ action:
               entity_id: !input "light"
             data:
               brightness: 255
-              rgb_color: [255, 255, 255]
+              rgb_color: [255, 170, 95]
       - conditions:
           - condition: template
             value_template: '{{ trigger.event.data.command == "off" }}'
@@ -90,7 +90,7 @@ action:
             data:
               rgb_color:
                 - >
-                  {% if state_attr(var_light, "rgb_color")[0] == 255 and state_attr(var_light, "rgb_color")[1] == 170 and state_attr(var_light, "rgb_color")[2] // 5 == 19 %}
+                  {% if state_attr(var_light, "rgb_color")[0] == 255 and state_attr(var_light, "rgb_color")[1] == 170 and state_attr(var_light, "rgb_color")[2] // 10 == 9 %}
                     {% set high = 0 %}
                     {% set middle = 0 %}
                     {% set low = 0 %}
@@ -107,7 +107,7 @@ action:
                     {{((next // 4) % 2) * 255}}
                   {% endif %}
                 - >
-                  {% if state_attr(var_light, "rgb_color")[0] == 255 and state_attr(var_light, "rgb_color")[1] == 170 and state_attr(var_light, "rgb_color")[2] // 5 == 19 %}
+                  {% if state_attr(var_light, "rgb_color")[0] == 255 and state_attr(var_light, "rgb_color")[1] == 170 and state_attr(var_light, "rgb_color")[2] // 10 == 9 %}
                     {% set high = 0 %}
                     {% set middle = 0 %}
                     {% set low = 0 %}
@@ -124,7 +124,7 @@ action:
                     {{((next // 2) % 2) * 255}}
                   {% endif %}
                 - >
-                  {% if state_attr(var_light, "rgb_color")[0] == 255 and state_attr(var_light, "rgb_color")[1] == 170 and state_attr(var_light, "rgb_color")[2] // 5 == 19 %}
+                  {% if state_attr(var_light, "rgb_color")[0] == 255 and state_attr(var_light, "rgb_color")[1] == 170 and state_attr(var_light, "rgb_color")[2] // 10 == 9 %}
                     {% set high = 0 %}
                     {% set middle = 0 %}
                     {% set low = 0 %}
@@ -136,7 +136,7 @@ action:
                   {% set current = high * 4 + middle * 2 + low %}
                   {% set next = (current + (1 - (2 * (257 - trigger.event.data.params.param1)))) % 8 %}
                   {% if next == 0 %}
-                    96
+                    95
                   {% else %}
                     {{((next // 1) % 2) * 255}}
                   {% endif %}
