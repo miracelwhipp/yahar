@@ -90,22 +90,22 @@ action:
             data:
               rgb_color:
                 - >
-                  (((((state_attr(var_light, "rgb_color")[0] // 250) * 4 +
+                  {{(((((state_attr(var_light, "rgb_color")[0] // 250) * 4 +
                   (state_attr(var_light, "rgb_color")[1] // 250) * 2 +
                   (state_attr(var_light, "rgb_color")[2] // 250)) + 
-                  (1 - (2 * (257 - trigger.event.params.param1)))) 
-                  // 4) % 2) * 255
+                  (1 - (2 * (257 - trigger.event.data.params.param1)))) 
+                  // 4) % 2) * 255}}
                 - >
-                  (((((state_attr(var_light, "rgb_color")[0] // 250) * 4 +
+                  {{(((((state_attr(var_light, "rgb_color")[0] // 250) * 4 +
                   (state_attr(var_light, "rgb_color")[1] // 250) * 2 +
                   (state_attr(var_light, "rgb_color")[2] // 250)) + 
-                  (1 - (2 * (257 - trigger.event.params.param1)))) 
-                  // 2) % 2) * 255
+                  (1 - (2 * (257 - trigger.event.data.params.param1)))) 
+                  // 2) % 2) * 255}}
                 - >
-                  (((((state_attr(var_light, "rgb_color")[0] // 250) * 4 +
+                  {{(((((state_attr(var_light, "rgb_color")[0] // 250) * 4 +
                   (state_attr(var_light, "rgb_color")[1] // 250) * 2 +
                   (state_attr(var_light, "rgb_color")[2] // 250)) + 
-                  (1 - (2 * (257 - trigger.event.params.param1)))) 
-                  % 2)) * 255
+                  (1 - (2 * (257 - trigger.event.data.params.param1)))) 
+                  % 2)) * 255}}
               transition: "{{ (var_speed / 1000)|float }}"
     default: []
