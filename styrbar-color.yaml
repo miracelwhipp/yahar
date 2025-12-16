@@ -127,12 +127,15 @@ action:
             data:
 #              color_temp: 250
               color_temp: >-
-                {% set min = state_attr(var_light, "min_mireds") %}
-                {% set max_range = state_attr(var_light, "max_mireds") - min %}
-                {% set current = state_attr(var_light, "color_temp") - min %}
-                {% set step = (1 - (2 * (257 - trigger.event.data.params.param1))) * var_step %}
-                {% set next = (current + step) % max_range %}
-                {{next + min}}
+                {% set step = (1 - (2 * (257 - trigger.event.data.params.param1))) * 20 %}
+                {{state_attr(var_light, "color_temp") + step}}
+#              color_temp: >-
+#                {% set min = state_attr(var_light, "min_mireds") %}
+#                {% set max_range = state_attr(var_light, "max_mireds") - min %}
+#                {% set current = state_attr(var_light, "color_temp") - min %}
+#                {% set step = (1 - (2 * (257 - trigger.event.data.params.param1))) * var_step %}
+#                {% set next = (current + step) % max_range %}
+#                {{next + min}}
               transition: "{{ (var_speed / 1000)|float }}"
 #      - conditions: # press right or left arrow button
 #          - condition: template
