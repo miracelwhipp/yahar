@@ -41,14 +41,35 @@ blueprint:
           unit: mired
           min: 250
           max: 454
+    default_brightness:
+      name: Default brightness
+      description: The brightness of the light when turned on.
+      selector:
+        number:
+          min: 0
+          max: 255
+          step: 1
+          mode: slider
+      default: 255
+    steps:
+      name: color steps
+      description: The steps to change the color on the mired temperature scale. Tipping the "left" or "right" button will change the color temperature of the light by this amount.
+      selector:
+        number:
+          min: 5
+          max: 100
+          step: 5
+          unit_of_measurement: mired
+          mode: slider
+      default: 20
 mode: restart
 max_exceeded: silent
 variables:
   var_light: !input "light"
   var_speed: !input "speed"
   var_default_color: !input "default_color"
-  var_default_brightness: 255
-  var_steps: 20
+  var_default_brightness: !input "default_brightness"
+  var_steps: !input "steps"
 trigger:
   - platform: event
     event_type: zha_event
