@@ -90,9 +90,15 @@ action:
             data:
               rgb_color:
                 - >
-                  {% set high = (state_attr(var_light, "rgb_color")[0] // 250) %}
-                  {% set middle = (state_attr(var_light, "rgb_color")[1] // 250) %}
-                  {% set low = (state_attr(var_light, "rgb_color")[2] // 250) %}
+                  {% if state_attr(var_light, "rgb_color")[0] == 255 and state_attr(var_light, "rgb_color")[1] == 170 and state_attr(var_light, "rgb_color")[2] == 96 %}
+                    {% set high = 0 %}
+                    {% set middle = 0 %}
+                    {% set low = 0 %}
+                  {% else %}
+                    {% set high = (state_attr(var_light, "rgb_color")[0] // 250) %}
+                    {% set middle = (state_attr(var_light, "rgb_color")[1] // 250) %}
+                    {% set low = (state_attr(var_light, "rgb_color")[2] // 250) %}
+                  {% endif %}
                   {% set current = high * 4 + middle * 2 + low %}
                   {% set next = (current + (1 - (2 * (257 - trigger.event.data.params.param1)))) % 8 %}
                   {% if next == 0 %}
@@ -101,9 +107,15 @@ action:
                     {{((next // 4) % 2) * 255}}
                   {% endif %}
                 - >
-                  {% set high = (state_attr(var_light, "rgb_color")[0] // 250) %}
-                  {% set middle = (state_attr(var_light, "rgb_color")[1] // 250) %}
-                  {% set low = (state_attr(var_light, "rgb_color")[2] // 250) %}
+                  {% if state_attr(var_light, "rgb_color")[0] == 255 and state_attr(var_light, "rgb_color")[1] == 170 and state_attr(var_light, "rgb_color")[2] == 96 %}
+                    {% set high = 0 %}
+                    {% set middle = 0 %}
+                    {% set low = 0 %}
+                  {% else %}
+                    {% set high = (state_attr(var_light, "rgb_color")[0] // 250) %}
+                    {% set middle = (state_attr(var_light, "rgb_color")[1] // 250) %}
+                    {% set low = (state_attr(var_light, "rgb_color")[2] // 250) %}
+                  {% endif %}
                   {% set current = high * 4 + middle * 2 + low %}
                   {% set next = (current + (1 - (2 * (257 - trigger.event.data.params.param1)))) % 8 %}
                   {% if next == 0 %}
@@ -112,13 +124,19 @@ action:
                     {{((next // 2) % 2) * 255}}
                   {% endif %}
                 - >
-                  {% set high = (state_attr(var_light, "rgb_color")[0] // 250) %}
-                  {% set middle = (state_attr(var_light, "rgb_color")[1] // 250) %}
-                  {% set low = (state_attr(var_light, "rgb_color")[2] // 250) %}
+                  {% if state_attr(var_light, "rgb_color")[0] == 255 and state_attr(var_light, "rgb_color")[1] == 170 and state_attr(var_light, "rgb_color")[2] == 96 %}
+                    {% set high = 0 %}
+                    {% set middle = 0 %}
+                    {% set low = 0 %}
+                  {% else %}
+                    {% set high = (state_attr(var_light, "rgb_color")[0] // 250) %}
+                    {% set middle = (state_attr(var_light, "rgb_color")[1] // 250) %}
+                    {% set low = (state_attr(var_light, "rgb_color")[2] // 250) %}
+                  {% endif %}
                   {% set current = high * 4 + middle * 2 + low %}
                   {% set next = (current + (1 - (2 * (257 - trigger.event.data.params.param1)))) % 8 %}
                   {% if next == 0 %}
-                    95
+                    96
                   {% else %}
                     {{((next // 1) % 2) * 255}}
                   {% endif %}
