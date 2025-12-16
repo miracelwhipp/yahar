@@ -52,7 +52,7 @@ action:
               entity_id: !input "light"
             data:
               brightness: 255
-              rgb_color: [255, 170, 95]
+              rgb_color: [255, 170, 94]
       - conditions:
           - condition: template
             value_template: '{{ trigger.event.data.command == "off" }}'
@@ -136,7 +136,7 @@ action:
                   {% set current = high * 4 + middle * 2 + low %}
                   {% set next = (current + (1 - (2 * (257 - trigger.event.data.params.param1)))) % 8 %}
                   {% if next == 0 %}
-                    95
+                    94
                   {% else %}
                     {{((next // 1) % 2) * 255}}
                   {% endif %}
