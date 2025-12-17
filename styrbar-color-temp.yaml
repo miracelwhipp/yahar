@@ -54,14 +54,15 @@ blueprint:
       default: 255
     steps:
       name: color steps
-      description: The steps to change the color in the xy color model. Tipping the "left" or "right" button will change the color of the light by this amount.
+      description: The steps to change the color on the mired temperature scale. Tipping the "left" or "right" button will change the color temperature of the light by this amount.
       selector:
         number:
-          min: 0.1
-          max: 0.5
-          step: 0.001
+          min: 5
+          max: 100
+          step: 5
+          unit_of_measurement: mired
           mode: slider
-      default: 0.2
+      default: 20
 mode: restart
 max_exceeded: silent
 variables:
@@ -122,46 +123,12 @@ action:
             target:
               entity_id: !input "light"
             data:
-              xy_color:
-                - >-
-                  {% set x = state_attr(var_light, "xy_color")[0] %}
-                  {% set y = state_attr(var_light, "xy_color")[1] %}
-                  {% set step = (1 - (2 * (257 - trigger.event.data.params.param1))) * var_steps %}
-                  {% set nextY = y + step %}
-                  {% if nextY > 1 %}
-                    {% set nextX = x + step %}
-                    {% if nextX > 1 %}
-                      {% set nextXVal = 0.0 %}
-                    {% else %}
-                      {% set nextXVal = nextX %}
-                    {% endif %}
-                  {% else %}
-                    {% if nextY < 0 %}
-                      {% set nextX = x + step %}
-                      {% if nextX < 0 %}
-                        {% set nextXVal = 1.0 %}
-                      {% else %}
-                        {% set nextXVal = nextX %}
-                      {% endif %}
-                    {% else %}
-                      {% set nextXVal = x %}
-                    {% endif %}
-                  {% endif %}
-                  {{nextXVal}}
-                - >-
-                  {% set x = state_attr(var_light, "xy_color")[0] %}
-                  {% set y = state_attr(var_light, "xy_color")[1] %}
-                  {% set step = (1 - (2 * (257 - trigger.event.data.params.param1))) * var_steps %}
-                  {% set nextY = y + step %}
-                  {% if nextY > 1 %}
-                    {% set nextYVal = 0.0 %}
-                  {% else %}
-                    {% if nextY < 0 %}
-                      {% set nextYVal = 1.0 %}
-                    {% else %}
-                      {% set nextYVal = nextYVal %}
-                    {% endif %}
-                  {% endif %}
-                  {{nextYVal}}
+              color_temp: >-
+                {% set min = state_attr(var_light, "min_mireds") %}
+                {% set max = state_attr(var_light, "max_mireds") %}
+                {% set current = state_attr(var_light, "color_temp") %}
+                {% set step = (1 - (2 * (257 - trigger.event.data.params.param1))) * var_steps %}
+                {% set next = ((current - min + step) % (max - min)) + min %}
+                {{next}}
               transition: "{{ (var_speed / 1000)|float }}"
     default: []

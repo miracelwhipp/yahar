@@ -15,7 +15,7 @@ blueprint:
         device:
           integration: zha
           manufacturer: IKEA of Sweden
-          model: Remote Control N2
+          model: RODRET wireless dimmer
     light:
       name: Light
       description: Select the light entity you wish to control.
@@ -52,16 +52,6 @@ blueprint:
           step: 1
           mode: slider
       default: 255
-    steps:
-      name: color steps
-      description: The steps to change the color in the xy color model. Tipping the "left" or "right" button will change the color of the light by this amount.
-      selector:
-        number:
-          min: 0.1
-          max: 0.5
-          step: 0.001
-          mode: slider
-      default: 0.2
 mode: restart
 max_exceeded: silent
 variables:
@@ -69,7 +59,6 @@ variables:
   var_speed: !input "speed"
   var_default_color: !input "default_color"
   var_default_brightness: !input "default_brightness"
-  var_steps: !input "steps"
 trigger:
   - platform: event
     event_type: zha_event
@@ -113,55 +102,5 @@ action:
               entity_id: !input "light"
             data:
               brightness_step_pct: -20
-              transition: "{{ (var_speed / 1000)|float }}"
-      - conditions: # press right or left arrow button
-          - condition: template
-            value_template: '{{ trigger.event.data.command == "press" }}'
-        sequence:
-          - service: light.turn_on
-            target:
-              entity_id: !input "light"
-            data:
-              xy_color:
-                - >-
-                  {% set x = state_attr(var_light, "xy_color")[0] %}
-                  {% set y = state_attr(var_light, "xy_color")[1] %}
-                  {% set step = (1 - (2 * (257 - trigger.event.data.params.param1))) * var_steps %}
-                  {% set nextY = y + step %}
-                  {% if nextY > 1 %}
-                    {% set nextX = x + step %}
-                    {% if nextX > 1 %}
-                      {% set nextXVal = 0.0 %}
-                    {% else %}
-                      {% set nextXVal = nextX %}
-                    {% endif %}
-                  {% else %}
-                    {% if nextY < 0 %}
-                      {% set nextX = x + step %}
-                      {% if nextX < 0 %}
-                        {% set nextXVal = 1.0 %}
-                      {% else %}
-                        {% set nextXVal = nextX %}
-                      {% endif %}
-                    {% else %}
-                      {% set nextXVal = x %}
-                    {% endif %}
-                  {% endif %}
-                  {{nextXVal}}
-                - >-
-                  {% set x = state_attr(var_light, "xy_color")[0] %}
-                  {% set y = state_attr(var_light, "xy_color")[1] %}
-                  {% set step = (1 - (2 * (257 - trigger.event.data.params.param1))) * var_steps %}
-                  {% set nextY = y + step %}
-                  {% if nextY > 1 %}
-                    {% set nextYVal = 0.0 %}
-                  {% else %}
-                    {% if nextY < 0 %}
-                      {% set nextYVal = 1.0 %}
-                    {% else %}
-                      {% set nextYVal = nextYVal %}
-                    {% endif %}
-                  {% endif %}
-                  {{nextYVal}}
               transition: "{{ (var_speed / 1000)|float }}"
     default: []
