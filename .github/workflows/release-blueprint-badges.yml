@@ -1,0 +1,71 @@
+name: Add HA Blueprint Import Badges
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  update-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install yq
+        run: |
+          sudo wget -qO /usr/local/bin/yq \
+            https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+
+      - name: Generate blueprint badge markdown
+        id: badges
+        run: |
+          OWNER="${{ github.repository_owner }}"
+          REPO="${{ github.event.repository.name }}"
+          TAG="${{ github.event.release.tag_name }}"
+
+          SECTION_TITLE="## 🧩 Home Assistant Blueprints"
+          OUTPUT_FILE=badges.md
+
+          echo "$SECTION_TITLE" > "$OUTPUT_FILE"
+          echo "" >> "$OUTPUT_FILE"
+
+          FOUND=0
+
+          while IFS= read -r file; do
+            # Skip files without a blueprint header
+            if ! yq '.blueprint.name' "$file" >/dev/null 2>&1; then
+              continue
+            fi
+
+            NAME=$(yq -r '.blueprint.name' "$file")
+            [ "$NAME" = "null" ] && continue
+
+            RAW_URL="https://raw.githubusercontent.com/$OWNER/$REPO/$TAG/$file"
+            IMPORT_URL="https://my.home-assistant.io/redirect/blueprint_import/?url=$RAW_URL"
+
+            echo "### $NAME" >> "$OUTPUT_FILE"
+            echo "[![Import Blueprint](https://my.home-assistant.io/badges/blueprint_import.svg)]($IMPORT_URL)" >> "$OUTPUT_FILE"
+            echo "" >> "$OUTPUT_FILE"
+
+            FOUND=1
+          done < <(find . -type f -name "*.yaml" | sort)
+
+          if [ "$FOUND" -eq 0 ]; then
+            echo "_No valid Home Assistant blueprints found in this release._" >> "$OUTPUT_FILE"
+          fi
+
+          echo "content<<EOF" >> "$GITHUB_OUTPUT"
+          cat "$OUTPUT_FILE" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Append badges to release notes
+        uses: softprops/action-gh-release@v2
+        with:
+          append_body: true
+          body: |
+            ${{ steps.badges.outputs.content }}

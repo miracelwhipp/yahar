@@ -1,38 +1,24 @@
 
 
-# copied from https://gist.github.com/orcema/c282c72ddc549060fb10999dbe774526
 blueprint:
-  name: IKEA RODRED
+  name: ONOFF switch
   description:
-    This automation simulates the use of the IKEA RODRET remote control
-    connected through ZHA.
+    This automation simulates the use of any remote control
+    connected through ZHA to shut light on and off
   domain: automation
   input:
     remote:
-      name: IKEA RODRED remote control
+      name: remote switch with on and off button
       description: Select the remote control you wish to use.
       selector:
         device:
           integration: zha
-          manufacturer: IKEA of Sweden
-          model: RODRET wireless dimmer
     light:
       name: Light
       description: Select the light entity you wish to control.
       selector:
         entity:
           domain: light
-    speed:
-      name: Speed
-      description: The speed in which to update the light when the button is held.
-      selector:
-        number:
-          min: 100.0
-          max: 1000.0
-          step: 100.0
-          unit_of_measurement: milliseconds
-          mode: slider
-      default: 500
     default_color:
       name: Default Color
       description: The color of the light when turned on
@@ -56,7 +42,6 @@ mode: restart
 max_exceeded: silent
 variables:
   var_light: !input "light"
-  var_speed: !input "speed"
   var_default_color: !input "default_color"
   var_default_brightness: !input "default_brightness"
 trigger:
@@ -83,24 +68,4 @@ action:
           - service: light.turn_off
             target:
               entity_id: !input "light"
-      - conditions:
-          - condition: template
-            value_template: '{{ trigger.event.data.command == "move_with_on_off" }}'
-        sequence:
-          - service: light.turn_on
-            target:
-              entity_id: !input "light"
-            data:
-              brightness_step_pct: 20
-              transition: "{{ (var_speed / 1000)|float }}"
-      - conditions:
-          - condition: template
-            value_template: '{{ trigger.event.data.command == "move" }}'
-        sequence:
-          - service: light.turn_on
-            target:
-              entity_id: !input "light"
-            data:
-              brightness_step_pct: -20
-              transition: "{{ (var_speed / 1000)|float }}"
     default: []
