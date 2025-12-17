@@ -2,9 +2,9 @@
 
 # copied from https://gist.github.com/orcema/c282c72ddc549060fb10999dbe774526
 blueprint:
-  name: ZHA - IKEA STYRBAR/TRADFRI - Color Lights
+  name: IKEA RODRED
   description:
-    This automation simulates the use of the IKEA TRADFRI remote control
+    This automation simulates the use of the IKEA RODRET remote control
     connected through ZHA.
   domain: automation
   input:

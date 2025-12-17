@@ -2,10 +2,10 @@
 
 # copied from https://gist.github.com/orcema/c282c72ddc549060fb10999dbe774526
 blueprint:
-  name: ZHA - IKEA STYRBAR/TRADFRI - Color Lights
+  name: IKEA STYRBAR - Color Lights
   description:
     This automation simulates the use of the IKEA TRADFRI remote control
-    connected through ZHA.
+    connected through ZHA changing the color on th x/y scale
   domain: automation
   input:
     remote:
