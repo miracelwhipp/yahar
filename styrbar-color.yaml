@@ -159,7 +159,7 @@ action:
                     {% if nextY < 0 %}
                       {% set nextYVal = 1.0 %}
                     {% else %}
-                      {% set nextYVal = nextYVal %}
+                      {% set nextYVal = nextY %}
                     {% endif %}
                   {% endif %}
                   {{nextYVal}}
