@@ -41,7 +41,7 @@ blueprint:
           unit: mired
           min: 250
           max: 454
-      default: 357
+      default: 284
     default_brightness:
       name: Default brightness
       description: The brightness of the light when turned on.

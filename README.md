@@ -13,3 +13,6 @@ A simple repo containing my first steps in home automation
 
 ## rodret
 [![import rodret](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fraw.githubusercontent.com%2Fmiracelwhipp%2Fyahar%2Frefs%2Fheads%2Fmain%2Frodret.yaml)
+
+## simple on/off
+[![import rodret](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fraw.githubusercontent.com%2Fmiracelwhipp%2Fyahar%2Frefs%2Fheads%2Fmain%2Fonoff.yaml)
